@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Calendário PPGCA 2026 — UNEMAT</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#111a33;
+      --card2:#0f1730;
+      --text:#eaf0ff;
+      --muted:#a9b4d6;
+      --line:rgba(255,255,255,.10);
+      --good:#2ee59d;
+      --warn:#ffd166;
+      --accent:#7c5cff;
+      --accent2:#2dd4ff;
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 10% -10%, rgba(124,92,255,.35), transparent 60%),
+                  radial-gradient(900px 600px at 110% 10%, rgba(45,212,255,.25), transparent 55%),
+                  radial-gradient(900px 700px at 50% 120%, rgba(46,229,157,.20), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+    header{
+      padding:20px 16px 10px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    h1{
+      margin:0;
+      font-size:20px;
+      letter-spacing:.2px;
+    }
+    .subtitle{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    button, .btn{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(124,92,255,.25), rgba(124,92,255,.05));
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:650;
+      font-size:13px;
+      box-shadow: 0 6px 20px rgba(124,92,255,.08);
+      transition: transform .08s ease, filter .15s ease, border-color .15s ease;
+      text-decoration:none;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    button:hover, .btn:hover{ transform: translateY(-1px); filter:brightness(1.06); border-color: rgba(124,92,255,.45);}
+    button:active, .btn:active{ transform: translateY(0px); }
+    .btn.secondary{
+      background: linear-gradient(180deg, rgba(45,212,255,.22), rgba(45,212,255,.05));
+      box-shadow: 0 6px 20px rgba(45,212,255,.08);
+    }
+    .btn.green{
+      background: linear-gradient(180deg, rgba(46,229,157,.22), rgba(46,229,157,.05));
+      box-shadow: 0 6px 20px rgba(46,229,157,.08);
+    }
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:0 16px 28px;
+    }
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:14px;
+      margin-top:12px;
+    }
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .tabgroup{
+      display:flex;
+      gap:8px;
+      background: rgba(0,0,0,.25);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:6px;
+    }
+    .tab{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid transparent;
+      background: transparent;
+      font-weight:800;
+      font-size:13px;
+      color: var(--muted);
+    }
+    .tab.active{
+      color: var(--text);
+      border-color: rgba(124,92,255,.45);
+      background: rgba(124,92,255,.16);
+    }
+    .filters{
+      display:grid;
+      grid-template-columns: 1.2fr .7fr .7fr;
+      gap:10px;
+      margin-top:12px;
+    }
+    @media (max-width: 820px){
+      .filters{ grid-template-columns:1fr; }
+      .actions{ justify-content:flex-start; }
+    }
+    input, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline:none;
+    }
+    input::placeholder{ color: rgba(233,240,255,.55); }
+    .toggles{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:10px;
+      color: var(--muted);
+      font-size:13px;
+    }
+    .chip{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+    @media (max-width: 820px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(17,26,51,.85), rgba(15,23,48,.75));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      padding:14px;
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background: radial-gradient(500px 120px at 10% 0%, rgba(124,92,255,.22), transparent 55%),
+                  radial-gradient(420px 120px at 90% 0%, rgba(45,212,255,.18), transparent 55%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .card > *{ position:relative; z-index:1; }
+    .title{
+      font-size:15px;
+      font-weight:900;
+      margin:0 0 8px;
+      line-height:1.25;
+    }
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:10px;
+    }
+    .pill{
+      font-size:12px;
+      font-weight:800;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      color: var(--muted);
+    }
+    .pill.good{ color: #d7fff0; border-color: rgba(46,229,157,.35); background: rgba(46,229,157,.10);}
+    .pill.warn{ color: #fff3d6; border-color: rgba(255,209,102,.35); background: rgba(255,209,102,.10);}
+    .dates{
+      font-size:13px;
+      color: var(--text);
+      margin:0 0 8px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .desc{
+      font-size:13px;
+      color: var(--muted);
+      margin:0 0 12px;
+      line-height:1.4;
+    }
+    .cardactions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .small{
+      padding:9px 10px;
+      border-radius:12px;
+      font-size:12.5px;
+    }
+    .footer{
+      color: rgba(233,240,255,.65);
+      font-size:12px;
+      margin-top:12px;
+      line-height:1.45;
+    }
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.14);
+      padding:10px 12px;
+      border-radius:14px;
+      color: var(--text);
+      display:none;
+      box-shadow: 0 12px 30px rgba(0,0,0,.45);
+      max-width:min(540px, 92vw);
+      text-align:center;
+      font-weight:700;
+      font-size:13px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div>
+      <h1>Calendário PPGCA 2026 — UNEMAT</h1>
+      <div class="subtitle">Abra no celular/PC. Filtre, copie para WhatsApp/Toki e exporte para o seu calendário (.ICS / Google Calendar).</div>
+    </div>
+    <div class="actions">
+      <button id="btnCopyAll" class="btn secondary" title="Copia um texto pronto para WhatsApp/Toki">📋 Copiar texto (WhatsApp/Toki)</button>
+      <button id="btnIcs" class="btn green" title="Gera um arquivo .ics com os eventos visíveis">📆 Exportar .ICS</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="tabs">
+      <div class="tabgroup" role="tablist" aria-label="Semestres">
+        <button class="tab active" data-sem="2026/1" role="tab" aria-selected="true">2026/1</button>
+        <button class="tab" data-sem="2026/2" role="tab" aria-selected="false">2026/2</button>
+      </div>
+      <div class="chip" title="Alarmes entram no arquivo .ICS">
+        🔔 Alarmes no ICS:
+        <label style="display:inline-flex;gap:6px;align-items:center;cursor:pointer;">
+          <input id="alarm7" type="checkbox" checked style="width:auto;"/> 7 dias antes
+        </label>
+        <label style="display:inline-flex;gap:6px;align-items:center;cursor:pointer;">
+          <input id="alarm1" type="checkbox" style="width:auto;"/> 1 dia antes
+        </label>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input id="q" placeholder="Buscar: disciplina, atividade, docente..."/>
+      <select id="type">
+        <option value="">Tipo (todos)</option>
+        <option value="Atividade administrativa">Atividade administrativa</option>
+        <option value="Disciplina">Disciplina</option>
+        <option value="Tópico especial">Tópico especial</option>
+      </select>
+      <select id="month">
+        <option value="">Mês (todos)</option>
+      </select>
+    </div>
+
+    <div class="toggles">
+      <span class="chip">✅ Eventos visíveis: <span id="count">0</span></span>
+      <span class="chip">📌 Dica: “Adicionar no Google” abre um evento pronto (tudo-dia) no Google Calendar.</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="grid" class="grid" aria-live="polite"></div>
+
+  <div class="footer">
+    <b>Como usar:</b> 1) escolha o semestre, 2) filtre se quiser, 3) copie o texto para o Toki/WhatsApp ou exporte o .ICS e importe no seu calendário.
+    <br/><b>Obs.:</b> eventos de intervalo são “dia inteiro” e terminam no dia final (o .ICS usa a regra do “fim exclusivo”, então internamente ele fecha no dia seguinte ao último dia).
+  </div>
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  // ====== DADOS (PPGCA 2026) ======
+  // Datas no formato YYYY-MM-DD (all-day).
+  const EVENTS = [
+    // 2026/1 — Atividades
+    { sem:"2026/1", kind:"Atividade administrativa", title:"Rematrícula veteranos (SIGAA)", start:"2026-03-23", end:"2026-03-31", details:"Rematrícula veteranos pelo SIGAA (Sistema Integrado de Gestão de Atividades Acadêmicas)." },
+    { sem:"2026/1", kind:"Atividade administrativa", title:"Matrícula turma 2026/1 (Secretaria PPGCA)", start:"2026-03-30", end:"2026-04-04", details:"Matrícula – Turma 2026/1 (mestrado e doutorado) na secretaria do PPGCA." },
+    { sem:"2026/1", kind:"Atividade administrativa", title:"Aluno especial — solicitação por e-mail", start:"2026-03-23", end:"2026-03-31", details:"Solicitação de matrícula de aluno especial por e-mail: ppg_ca@unemat.br." },
+
+    // 2026/1 — Disciplinas
+    { sem:"2026/1", kind:"Disciplina", title:"Aula Inicial / Coordenação (Obrigatória — Mestrado e Doutorado)", start:"2026-04-06", end:"2026-04-06", teacher:"Coordenação", details:"Aula inicial / coordenação." },
+    { sem:"2026/1", kind:"Disciplina", title:"Epistemologia Ambiental (Obrigatória — Mestrado e Doutorado)", start:"2026-04-07", end:"2026-04-11", teacher:"Dr. Aumeri Carlos Bampi", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/1", kind:"Disciplina", title:"Meio Ambiente e Sustentabilidade nos Biomas (Obrigatória)", start:"2026-04-20", end:"2026-04-25", teacher:"Dra. Solange K. I. Castrillon e convidados(as)", details:"Pantanal, Amazônia e Cerrado | CH 60 | Créditos 4.0" },
+    { sem:"2026/1", kind:"Disciplina", title:"Indicadores biológicos como ferramenta de avaliação ambiental (Optativa)", start:"2026-05-04", end:"2026-05-09", teacher:"Dra. Maria Antônia Carniello e convidados(as)", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/1", kind:"Disciplina", title:"Estatística Aplicada à Ciências Ambientais I (Optativa)", start:"2026-05-18", end:"2026-05-23", teacher:"Dr. Ernandes Sobreira Junior / Dr. Wilkinson Lopes Lázaro", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/1", kind:"Disciplina", title:"Etnobiologia e Etnoecologia (Optativa)", start:"2026-05-25", end:"2026-05-29", teacher:"Dra. Carolina Joana da Silva e convidados", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/1", kind:"Disciplina", title:"Componentes ambientais, uso e gestão dos recursos hídricos (Optativa)", start:"2026-06-01", end:"2026-06-06", teacher:"Dra. Maria Ap. P. Pierangeli e convidados(as)", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/1", kind:"Disciplina", title:"Estatística Aplicada à Ciências Ambientais II (Optativa)", start:"2026-06-15", end:"2026-06-20", teacher:"Dr. Juliano André Bogoni", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/1", kind:"Tópico especial", title:"Tópicos Especiais: Análise Bibliométrica e Pesquisa Qualitativa", start:"2026-06-29", end:"2026-07-03", teacher:"Dr. Ernandes Sobreira O. Junior e convidados(as)", details:"CH 30 | Créditos 2.0" },
+    { sem:"2026/1", kind:"Disciplina", title:"Seminários de Mestrado I (Obrigatória — Mestrado)", start:"2026-07-06", end:"2026-07-11", teacher:"Dr. Dionei José da Silva e convidados(as)", details:"CH 30 | Créditos 2.0" },
+
+    // 2026/2 — Atividades
+    { sem:"2026/2", kind:"Atividade administrativa", title:"Rematrícula (SIGAA)", start:"2026-07-27", end:"2026-07-31", details:"Rematrícula pelo SIGAA (Sistema Integrado de Gestão de Atividades Acadêmicas)." },
+    { sem:"2026/2", kind:"Atividade administrativa", title:"Aluno especial — solicitação por e-mail", start:"2026-07-27", end:"2026-07-31", details:"Solicitação de matrícula de aluno especial por e-mail: ppg_ca@unemat.br." },
+
+    // 2026/2 — Disciplinas
+    { sem:"2026/2", kind:"Disciplina", title:"Ciências Sociais e o Desenvolvimento Regional (Obrigatória — Doutorado) — Parte 1", start:"2026-08-03", end:"2026-08-05", teacher:"Dr. Sandro Benedito Sguarezi e convidados(as)", details:"CH 60 | Créditos 4.0 (continua em outubro)" },
+    { sem:"2026/2", kind:"Disciplina", title:"Ciências Sociais e o Desenvolvimento Regional (Obrigatória — Doutorado) — Parte 2", start:"2026-10-20", end:"2026-10-22", teacher:"Dr. Sandro Benedito Sguarezi e convidados(as)", details:"Continuação | CH 60 | Créditos 4.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"Pesquisa orientada (Parte I) (Optativa)", start:"2026-08-10", end:"2026-08-12", teacher:"Dra. Carla Galbiati e convidados(as)", details:"CH 30 | Créditos 2.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"Atributos do Solo e Conservação Ambiental (Optativa)", start:"2026-08-24", end:"2026-08-28", teacher:"Dra. Maria Ap. P. Pierangeli e convidados(as)", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"Climas, mudanças climáticas e consequências ambientais (Optativa)", start:"2026-09-08", end:"2026-09-12", teacher:"Dr. Ernandes Sobreira O. Junior e convidados(as)", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"A Economia no contexto das Ciências Ambientais (Optativa)", start:"2026-09-21", end:"2026-09-25", teacher:"Dr. Carlos Eduardo Frickmann Young e Dra. Maira Luiza Spanholi", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"Métodos e Técnicas para o Estudo da Diversidade Cultural (Optativa)", start:"2026-09-28", end:"2026-10-03", teacher:"Dra. Maria Antônia Carniello e convidados(as)", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"Conservação e uso sustentável da Biodiversidade (Optativa)", start:"2026-10-13", end:"2026-10-17", teacher:"Dr. Manoel dos Santos Filho e convidados(as)", details:"Pantanal, Amazônia e Cerrado | CH 60 | Créditos 4.0" },
+    { sem:"2026/2", kind:"Tópico especial", title:"Tópicos especiais — Redação Científica", start:"2026-10-26", end:"2026-10-28", teacher:"Dr. Juliano Bogoni e convidados(as)", details:"CH 30 | Créditos 2.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"Saúde e Interações Ambientais (Optativa)", start:"2026-11-09", end:"2026-11-14", teacher:"Dr. Antonio F. Malheiros e convidados(as)", details:"CH 60 | Créditos 4.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"Pesquisa orientada (Parte II) (Optativa)", start:"2026-11-17", end:"2026-11-19", teacher:"Dra. Carla Galbiati e convidados(as)", details:"CH 30 | Créditos 2.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"Seminários de Mestrado II (Obrigatória — Mestrado)", start:"2026-11-23", end:"2026-11-28", teacher:"Dr. Dionei José da Silva e convidados", details:"CH 30 | Créditos 2.0" },
+    { sem:"2026/2", kind:"Disciplina", title:"Seminários de Doutorado (Obrigatória — Doutorado)", start:"2026-11-23", end:"2026-11-28", teacher:"Dr. Claumir Cesar Muniz; Dr. Juliano André Bogoni e convidados(as)", details:"CH 60 | Créditos 4.0" },
+  ];
+
+  // ====== UTILS ======
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+  function toast(msg){
+    const t = $("#toast");
+    t.textContent = msg;
+    t.style.display = "block";
+    clearTimeout(toast._tm);
+    toast._tm = setTimeout(()=> t.style.display="none", 2200);
+  }
+
+  function pad2(n){ return String(n).padStart(2,"0"); }
+
+  function toBR(iso){
+    const [y,m,d] = iso.split("-").map(Number);
+    return `${pad2(d)}/${pad2(m)}/${y}`;
+  }
+
+  function monthLabel(m){
+    const names = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    return names[m-1] || "";
+  }
+
+  function dateToYmdCompact(iso){
+    return iso.replaceAll("-","");
+  }
+
+  function addDaysISO(iso, days){
+    const [y,m,d] = iso.split("-").map(Number);
+    const dt = new Date(Date.UTC(y, m-1, d));
+    dt.setUTCDate(dt.getUTCDate() + days);
+    const yy = dt.getUTCFullYear();
+    const mm = pad2(dt.getUTCMonth()+1);
+    const dd = pad2(dt.getUTCDate());
+    return `${yy}-${mm}-${dd}`;
+  }
+
+  function rangeLabel(start, end){
+    if(start === end) return toBR(start);
+    return `${toBR(start)} a ${toBR(end)}`;
+  }
+
+  function monthKey(iso){
+    return iso.slice(0,7); // YYYY-MM
+  }
+
+  function googleCalendarLink(ev){
+    // All-day events: end must be exclusive in Google dates.
+    const start = dateToYmdCompact(ev.start);
+    const endExclusive = dateToYmdCompact(addDaysISO(ev.end, 1));
+    const text = encodeURIComponent(ev.title);
+    const details = encodeURIComponent(
+      [
+        ev.kind ? `Tipo: ${ev.kind}` : "",
+        ev.teacher ? `Docente/Coord.: ${ev.teacher}` : "",
+        ev.details ? ev.details : ""
+      ].filter(Boolean).join("\n")
+    );
+    const dates = `${start}/${endExclusive}`;
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}`;
+  }
+
+  function whatsappTextFor(events){
+    // Texto “estilo Toki”: simples, linha a linha.
+    const lines = [];
+    lines.push("Agende estes compromissos do PPGCA UNEMAT (2026):");
+    lines.push("");
+
+    const bySem = groupBy(events, e => e.sem);
+    for(const sem of Object.keys(bySem).sort()){
+      lines.push(`📌 ${sem}`);
+      const list = bySem[sem].slice().sort((a,b)=> a.start.localeCompare(b.start));
+      for(const ev of list){
+        const when = rangeLabel(ev.start, ev.end);
+        const who = ev.teacher ? ` — ${ev.teacher}` : "";
+        lines.push(`• ${ev.title} (${when})${who}`);
+      }
+      lines.push("");
+    }
+
+    lines.push("Criar lembretes: 7 dias antes de cada evento.");
+    return lines.join("\n");
+  }
+
+  function icsEscape(s){
+    return String(s || "")
+      .replace(/\\/g, "\\\\")
+      .replace(/\n/g, "\\n")
+      .replace(/,/g, "\\,")
+      .replace(/;/g, "\\;");
+  }
+
+  function buildICS(events, alarms){
+    // alarms: array of {trigger:"-P7D"} etc.
+    const dtstamp = new Date().toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+    const lines = [];
+    lines.push("BEGIN:VCALENDAR");
+    lines.push("VERSION:2.0");
+    lines.push("PRODID:-//PPGCA UNEMAT//Calendario 2026//PT-BR");
+    lines.push("CALSCALE:GREGORIAN");
+    lines.push("METHOD:PUBLISH");
+
+    for(const ev of events){
+      const uid = `ppgca-${ev.sem}-${ev.title}-${ev.start}`.replace(/\s+/g,"-").replace(/[^\w\-]/g,"").toLowerCase() + "@unemat";
+      const dtstart = dateToYmdCompact(ev.start);
+      const dtendExclusive = dateToYmdCompact(addDaysISO(ev.end, 1));
+
+      const description = [
+        ev.kind ? `Tipo: ${ev.kind}` : "",
+        ev.teacher ? `Docente/Coord.: ${ev.teacher}` : "",
+        ev.details ? ev.details : "",
+        `Período: ${rangeLabel(ev.start, ev.end)}`
+      ].filter(Boolean).join("\n");
+
+      lines.push("BEGIN:VEVENT");
+      lines.push(`UID:${uid}`);
+      lines.push(`DTSTAMP:${dtstamp}`);
+      lines.push(`SUMMARY:${icsEscape(ev.title)}`);
+      lines.push(`DTSTART;VALUE=DATE:${dtstart}`);
+      lines.push(`DTEND;VALUE=DATE:${dtendExclusive}`);
+      lines.push(`DESCRIPTION:${icsEscape(description)}`);
+
+      if(alarms.length){
+        for(const a of alarms){
+          lines.push("BEGIN:VALARM");
+          lines.push(`TRIGGER:${a.trigger}`);
+          lines.push("ACTION:DISPLAY");
+          lines.push(`DESCRIPTION:${icsEscape("Lembrete: " + ev.title)}`);
+          lines.push("END:VALARM");
+        }
+      }
+
+      lines.push("END:VEVENT");
+    }
+
+    lines.push("END:VCALENDAR");
+    return lines.join("\r\n");
+  }
+
+  function download(filename, content, mime="text/plain;charset=utf-8"){
+    const blob = new Blob([content], {type:mime});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    }, 0);
+  }
+
+  function groupBy(arr, fn){
+    return arr.reduce((acc, x)=>{
+      const k = fn(x);
+      (acc[k] ||= []).push(x);
+      return acc;
+    }, {});
+  }
+
+  // ====== UI STATE ======
+  let currentSem = "2026/1";
+
+  function fillMonthOptions(){
+    const months = new Set(EVENTS.filter(e=> e.sem===currentSem).map(e=> monthKey(e.start)));
+    const sorted = Array.from(months).sort();
+    const sel = $("#month");
+    sel.innerHTML = `<option value="">Mês (todos)</option>` + sorted.map(k=>{
+      const [y,m] = k.split("-").map(Number);
+      return `<option value="${k}">${monthLabel(m)}/${y}</option>`;
+    }).join("");
+  }
+
+  function filteredEvents(){
+    const q = $("#q").value.trim().toLowerCase();
+    const type = $("#type").value;
+    const month = $("#month").value;
+
+    return EVENTS
+      .filter(e=> e.sem === currentSem)
+      .filter(e=> !type || e.kind === type)
+      .filter(e=> !month || monthKey(e.start) === month)
+      .filter(e=>{
+        if(!q) return true;
+        const blob = `${e.title} ${e.kind||""} ${e.teacher||""} ${e.details||""}`.toLowerCase();
+        return blob.includes(q);
+      })
+      .sort((a,b)=> a.start.localeCompare(b.start));
+  }
+
+  function kindPill(kind){
+    if(kind === "Atividade administrativa") return `<span class="pill warn">🗂️ ${kind}</span>`;
+    if(kind === "Tópico especial") return `<span class="pill good">✨ ${kind}</span>`;
+    return `<span class="pill">📚 ${kind}</span>`;
+  }
+
+  function render(){
+    fillMonthOptions();
+
+    const list = filteredEvents();
+    $("#count").textContent = list.length;
+
+    const grid = $("#grid");
+    grid.innerHTML = list.map(ev=>{
+      const when = rangeLabel(ev.start, ev.end);
+      const google = googleCalendarLink(ev);
+      const hasTeacher = !!ev.teacher;
+      return `
+        <section class="card">
+          <h3 class="title">${ev.title}</h3>
+          <div class="meta">
+            ${kindPill(ev.kind)}
+            <span class="pill">🗓️ ${when}</span>
+            ${hasTeacher ? `<span class="pill">👤 ${ev.teacher}</span>` : ``}
+          </div>
+          <p class="desc">${ev.details ? ev.details : "—"}</p>
+          <div class="cardactions">
+            <a class="btn small secondary" href="${google}" target="_blank" rel="noopener">➕ Adicionar no Google</a>
+            <button class="btn small" data-copy="${encodeURIComponent(singleEventText(ev))}">📋 Copiar (WhatsApp)</button>
+          </div>
+        </section>
+      `;
+    }).join("");
+
+    // bind copy buttons
+    $$("#grid button[data-copy]").forEach(btn=>{
+      btn.addEventListener("click", async ()=>{
+        const txt = decodeURIComponent(btn.getAttribute("data-copy"));
+        try{
+          await navigator.clipboard.writeText(txt);
+          toast("Texto copiado ✅");
+        }catch{
+          fallbackCopy(txt);
+        }
+      });
+    });
+  }
+
+  function singleEventText(ev){
+    const when = rangeLabel(ev.start, ev.end);
+    const parts = [
+      `Agendar: ${ev.title}`,
+      `Período: ${when}`,
+      ev.teacher ? `Docente/Coord.: ${ev.teacher}` : null,
+      ev.kind ? `Tipo: ${ev.kind}` : null,
+      ev.details ? `Obs.: ${ev.details}` : null,
+      `Lembrete: 7 dias antes`
+    ].filter(Boolean);
+    return parts.join("\n");
+  }
+
+  function fallbackCopy(text){
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try{
+      document.execCommand("copy");
+      toast("Texto copiado ✅");
+    }catch{
+      toast("Não consegui copiar automaticamente. Selecione e copie manualmente.");
+      alert(text);
+    }finally{
+      ta.remove();
+    }
+  }
+
+  // ====== EVENTS ======
+  $$(".tab").forEach(t=>{
+    t.addEventListener("click", ()=>{
+      $$(".tab").forEach(x=> x.classList.remove("active"));
+      t.classList.add("active");
+      currentSem = t.dataset.sem;
+      // reset filters (mantém busca)
+      $("#type").value = "";
+      $("#month").value = "";
+      render();
+    });
+  });
+
+  $("#q").addEventListener("input", render);
+  $("#type").addEventListener("change", render);
+  $("#month").addEventListener("change", render);
+
+  $("#btnCopyAll").addEventListener("click", async ()=>{
+    const list = filteredEvents();
+    const txt = whatsappTextFor(list);
+    try{
+      await navigator.clipboard.writeText(txt);
+      toast("Texto geral copiado ✅");
+    }catch{
+      fallbackCopy(txt);
+    }
+  });
+
+  $("#btnIcs").addEventListener("click", ()=>{
+    const list = filteredEvents();
+    const alarms = [];
+    if($("#alarm7").checked) alarms.push({trigger:"-P7D"});
+    if($("#alarm1").checked) alarms.push({trigger:"-P1D"});
+    const ics = buildICS(list, alarms);
+    const fname = `PPGCA_${currentSem.replace("/","-")}_eventos.ics`;
+    download(fname, ics, "text/calendar;charset=utf-8");
+    toast(".ICS gerado ✅");
+  });
+
+  // init
+  render();
+</script>
+</body>
+</html>
